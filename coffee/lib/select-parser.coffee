@@ -1,5 +1,5 @@
 class SelectParser
-  
+
   constructor: ->
     @options_index = 0
     @parsed = []
@@ -23,6 +23,11 @@ class SelectParser
   add_option: (option, group_position, group_disabled) ->
     if option.nodeName is "OPTION"
       if option.text != ""
+        dataAttributes = []
+        for attr in option.attributes when attr.name.indexOf('data-') == 0
+          dataAttributes.push
+            name: attr.name
+            value: attr.value
         if group_position?
           @parsed[group_position].children += 1
         @parsed.push
@@ -36,6 +41,7 @@ class SelectParser
           group_array_index: group_position
           classes: option.className
           style: option.style.cssText
+          data_attributes: dataAttributes
       else
         @parsed.push
           array_index: @parsed.length

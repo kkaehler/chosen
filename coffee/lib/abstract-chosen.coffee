@@ -7,8 +7,11 @@ root = this
 class AbstractChosen
 
   constructor: (@form_field, @options={}) ->
+    if not @options.length
+      this.set_default_options()
+
     this.set_default_values()
-    
+
     @is_multiple = @form_field.multiple
     this.set_default_text()
 
@@ -18,6 +21,20 @@ class AbstractChosen
     this.register_observers()
 
     this.finish_setup()
+
+  set_default_options: ->
+    i = 0
+    while i < @form_field.attributes.length
+      attr = @form_field.attributes[i]
+      if attr.name.length > 5 and attr.name.slice(0, 5) is "data-"
+        data_val = attr.value
+        if data_val is "true"
+          data_val = true
+        else if data_val is "false"
+          data_val = false
+        else data_val = parseInt(data_val)  unless isNaN(parseInt(data_val))
+        @options[attr.name.slice(5)] = data_val
+      i++
 
   set_default_values: ->
     @click_test_action = (evt) => this.test_active_click(evt)
@@ -49,7 +66,7 @@ class AbstractChosen
 
   input_focus: (evt) ->
     setTimeout (=> this.container_mousedown()), 50 unless @active_field
-  
+
   input_blur: (evt) ->
     if not @mouse_on_container
       @active_field = false
@@ -64,9 +81,10 @@ class AbstractChosen
       classes.push "group-option" if option.group_array_index?
       classes.push option.classes if option.classes != ""
 
+      dataAttributes = (" #{attr.name}=\"#{attr.value}\" " for attr in option.data_attributes)
       style = if option.style.cssText != "" then " style=\"#{option.style}\"" else ""
 
-      '<li id="' + option.dom_id + '" class="' + classes.join(' ') + '"'+style+'>' + option.html + '</li>'
+      '<li id="' + option.dom_id + '" class="' + classes.join(' ') + '"'+style+dataAttributes.join('')+'>' + option.html + '</li>'
     else
       ""
 
@@ -113,7 +131,7 @@ class AbstractChosen
     new_id = this.generate_random_id()
     @form_field.id = new_id
     new_id
-  
+
   generate_random_char: ->
     chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     rand = Math.floor(Math.random() * chars.length)
