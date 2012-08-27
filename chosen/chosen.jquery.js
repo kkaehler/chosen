@@ -174,6 +174,7 @@ Copyright (c) 2011 by Harvest
       this.disable_search_threshold = this.options.disable_search_threshold || 0;
       this.search_contains = this.options.search_contains || false;
       this.choices = 0;
+      this.search_disabled = this.options.search_disabled || false;
       this.single_backstroke_delete = this.options.single_backstroke_delete || false;
       return this.max_selected_options = this.options.max_selected_options || Infinity;
     };
@@ -392,6 +393,9 @@ Copyright (c) 2011 by Harvest
         container_div.html('<ul class="chzn-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chzn-drop" style="left:-9000px;"><ul class="chzn-results"></ul></div>');
       } else {
         container_div.html('<a href="javascript:void(0)" class="chzn-single chzn-default"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chzn-drop" style="left:-9000px;"><div class="chzn-search"><input type="text" autocomplete="off" /></div><ul class="chzn-results"></ul></div>');
+      }
+      if (this.search_disabled) {
+        container_div.find('div.chzn-search').css('display', 'none');
       }
       this.form_field_jq.hide().after(container_div);
       this.container = $('#' + this.container_id);

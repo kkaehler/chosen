@@ -48,6 +48,7 @@ class AbstractChosen
     @disable_search_threshold = @options.disable_search_threshold || 0
     @search_contains = @options.search_contains || false
     @choices = 0
+    @search_disabled = @options.search_disabled || false;
     @single_backstroke_delete = @options.single_backstroke_delete || false
     @max_selected_options = @options.max_selected_options || Infinity
 

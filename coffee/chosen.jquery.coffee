@@ -42,6 +42,9 @@ class Chosen extends AbstractChosen
     else
       container_div.html '<a href="javascript:void(0)" class="chzn-single chzn-default"><span>' + @default_text + '</span><div><b></b></div></a><div class="chzn-drop" style="left:-9000px;"><div class="chzn-search"><input type="text" autocomplete="off" /></div><ul class="chzn-results"></ul></div>'
 
+    if @search_disabled
+      container_div.find('div.chzn-search').css('display', 'none')
+
     @form_field_jq.hide().after container_div
     @container = ($ '#' + @container_id)
     @container.addClass( "chzn-container-" + (if @is_multiple then "multi" else "single") )
